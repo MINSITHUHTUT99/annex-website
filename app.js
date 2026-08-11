@@ -361,7 +361,7 @@ document.documentElement.classList.remove('no-js');
           service ? 'Service interested: ' + service : null,
           message ? '\nMessage:\n' + message : null
         ].filter(Boolean).join('\n');
-        window.location.href = 'mailto:contact@minsithuhtut2001@gmail.com?subject=' +
+        window.location.href = 'mailto:minsithuhtut2001@gmail.com?subject=' +
           encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines);
       };
 

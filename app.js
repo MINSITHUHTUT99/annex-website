@@ -69,9 +69,7 @@ document.documentElement.classList.remove('no-js');
       { id:'cases', tab:2 },
       { id:'packages', tab:3 },
       { id:'about', tab:4 },
-      { id:'why', tab:5 },
-      { id:'process', tab:6 },
-      { id:'faq', tab:7 }
+      { id:'faq', tab:5 }
     ];
 
     function clearActive(){
@@ -420,8 +418,6 @@ document.documentElement.classList.remove('no-js');
         '<a href="#services">Practices</a>',
         '<a href="#packages">Packages</a>',
         '<a href="#about">About</a>',
-        '<a href="#why">Why Annex</a>',
-        '<a href="#process">Engagement Model</a>',
         '<a href="#faq">FAQ</a>'
       ].join('');
     }
@@ -444,5 +440,80 @@ document.documentElement.classList.remove('no-js');
       faq.innerHTML = '<div class="wrap"><div class="section-head center reveal in"><span class="eyebrow center">FAQ</span><h2>Questions before you begin.</h2><p>Clear answers for teams exploring Agentic AI and workflow improvement.</p></div><div class="faq-grid"><article class="faq-item"><h3>Where do we start?</h3><p>We begin with the workflow that causes the most friction, delay or repetitive work.</p></article><article class="faq-item"><h3>Will people stay in control?</h3><p>Yes. We design clear review points, approvals and escalation paths around every workflow.</p></article><article class="faq-item"><h3>Do we need to replace our systems?</h3><p>Usually not. We connect the tools and information your team already uses where practical.</p></article><article class="faq-item"><h3>How quickly can we see value?</h3><p>A focused pilot can be scoped and delivered in weeks, then expanded based on results.</p></article></div></div>';
       var contact = document.getElementById('contact');
       if (contact) contact.before(faq);
+    }
+  }());
+
+  /* Menu bar: reading-progress bar, mobile hamburger, active-section highlight.
+     Runs after the nav is rebuilt above so it sees the final links. */
+  (function(){
+    var nav = document.getElementById('nav');
+    if(!nav) return;
+    var links = nav.querySelector('.nav-links');
+
+    // 1) Reading-progress bar
+    var bar = document.createElement('div');
+    bar.className = 'scroll-progress';
+    nav.appendChild(bar);
+    var updateBar = function(){
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+      bar.style.width = pct + '%';
+    };
+    updateBar();
+    window.addEventListener('scroll', updateBar, { passive:true });
+    window.addEventListener('resize', updateBar, { passive:true });
+
+    // 2) Mobile hamburger menu
+    if(links){
+      var burger = document.createElement('button');
+      burger.className = 'nav-burger-btn';
+      burger.setAttribute('aria-label', 'Open menu');
+      burger.setAttribute('aria-expanded', 'false');
+      burger.innerHTML = '<span></span><span></span><span></span>';
+      var bookBtn = nav.querySelector('.book-btn');
+      if(bookBtn && bookBtn.parentNode){ bookBtn.parentNode.insertBefore(burger, bookBtn.nextSibling); }
+      else { var wrap = nav.querySelector('.nav-wrap'); if(wrap){ wrap.appendChild(burger); } }
+
+      var setOpen = function(open){
+        links.classList.toggle('open', open);
+        burger.classList.toggle('is-open', open);
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      };
+      burger.addEventListener('click', function(e){
+        e.stopPropagation();
+        setOpen(!links.classList.contains('open'));
+      });
+      links.querySelectorAll('a').forEach(function(a){
+        a.addEventListener('click', function(){ setOpen(false); });
+      });
+      document.addEventListener('click', function(e){
+        if(links.classList.contains('open') && !nav.contains(e.target)){ setOpen(false); }
+      });
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape'){ setOpen(false); }
+      });
+    }
+
+    // 3) Highlight the current section in the menu while scrolling
+    if(links && 'IntersectionObserver' in window){
+      var map = {};
+      links.querySelectorAll('a[href^="#"]').forEach(function(a){
+        var id = a.getAttribute('href').slice(1);
+        var el = id && document.getElementById(id);
+        if(el){ map[id] = a; }
+      });
+      var ids = Object.keys(map);
+      if(ids.length){
+        var spy = new IntersectionObserver(function(entries){
+          entries.forEach(function(en){
+            if(!en.isIntersecting) return;
+            links.querySelectorAll('a').forEach(function(a){ a.classList.remove('active'); });
+            if(map[en.target.id]){ map[en.target.id].classList.add('active'); }
+          });
+        }, { rootMargin:'-45% 0px -50% 0px', threshold:0 });
+        ids.forEach(function(id){ spy.observe(document.getElementById(id)); });
+      }
     }
   }());

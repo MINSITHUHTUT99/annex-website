@@ -12,3 +12,4 @@ leads/
 # Node (only if you later add Netlify Functions)
 node_modules/
 .netlify/
+*.pptx

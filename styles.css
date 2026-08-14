@@ -1019,3 +1019,28 @@ html.js .nav{ animation:annexNavDrop .6s cubic-bezier(.2,.7,.2,1) both; }
 .rp-selfie time i{ color:#53bdeb; font-style:normal; }
 .rp-bubble.ok{ background:#005c4b; color:#e9edef; border-radius:9px; border-top-right-radius:2px; font-weight:600; }
 .rp-bubble.ok span{ color:rgba(233,237,239,.6); font-weight:500; }
+/* ============================================================
+   Alternating section backgrounds (from Case Studies down)
+   ============================================================ */
+.cases{ background:#ffffff; }
+.services{ background:#e9f1fb; }
+.pricing{ background:#ffffff; }
+.about{ background:#e9f1fb; }
+.faq{ background:#ffffff; }
+
+/* ============================================================
+   Sample Demos — tabbed video player
+   ============================================================ */
+.vdemo{ padding:100px 0; background:linear-gradient(160deg,#0f2b44,#0a1c2e); }
+.vdemo .section-head .eyebrow, .vdemo .section-head h2{ color:#fff; }
+.vdemo .section-head p{ color:rgba(255,255,255,.72); }
+.vdemo-tabs{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:34px 0 26px; }
+.vd-tab{ font-family:var(--body); font-size:15px; font-weight:600; color:rgba(255,255,255,.78);
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:999px;
+  padding:11px 22px; cursor:pointer; transition:transform .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease; }
+.vd-tab:hover{ background:rgba(255,255,255,.12); color:#fff; transform:translateY(-1px); }
+.vd-tab.active{ background:var(--emerald-2); border-color:var(--emerald-2); color:#fff; box-shadow:0 10px 24px rgba(31,116,186,.42); }
+.vdemo-stage{ max-width:940px; margin:0 auto; border-radius:18px; overflow:hidden;
+  box-shadow:0 30px 70px rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.1); }
+.vd-video{ display:block; width:100%; aspect-ratio:16/9; background:#000; }
+@media(max-width:600px){ .vd-tab{ font-size:13px; padding:9px 15px; } }

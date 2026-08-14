@@ -517,3 +517,22 @@ document.documentElement.classList.remove('no-js');
       }
     }
   }());
+  /* Sample Demos — tabbed video switcher */
+  (function(){
+    var tabs = document.querySelectorAll('.vd-tab');
+    var video = document.querySelector('.vd-video');
+    if(!tabs.length || !video) return;
+    var source = video.querySelector('source');
+    tabs.forEach(function(tab){
+      tab.addEventListener('click', function(){
+        var src = tab.getAttribute('data-src');
+        if(source.getAttribute('src') === src) return;
+        tabs.forEach(function(t){ t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+        tab.classList.add('active'); tab.setAttribute('aria-selected','true');
+        video.pause();
+        source.setAttribute('src', src);
+        video.load();
+        video.play().catch(function(){});
+      });
+    });
+  }());

@@ -189,12 +189,15 @@ document.documentElement.classList.remove('no-js');
       if(!scenes.length || !dots.length || !nowEl || !playBtn) return;
 
       var i = 0, timer = null, paused = false, seen = false;
+      function sLabel(n){ return scenes[n].getAttribute('data-label') || (meta[n] && meta[n].t) || ''; }
+      function sTime(n){ return scenes[n].getAttribute('data-time') || (meta[n] && meta[n].time) || ''; }
+      function sDur(n){ return parseInt(scenes[n].getAttribute('data-dur'), 10) || dur[n] || 5200; }
 
       function show(n){
         i = n;
         scenes.forEach(function(s, idx){ s.classList.toggle('active', idx === n); });
         dots.forEach(function(d, idx){ d.classList.toggle('active', idx === n); });
-        nowEl.innerHTML = '<b>' + meta[n].t + '</b><span class="tm">' + meta[n].time + '</span>';
+        nowEl.innerHTML = '<b>' + sLabel(n) + '</b><span class="tm">' + sTime(n) + '</span>';
       }
       function replay(){
         var s = scenes[i];
@@ -203,7 +206,7 @@ document.documentElement.classList.remove('no-js');
       function schedule(){
         clearTimeout(timer);
         if(paused || reduce) return;
-        timer = setTimeout(function(){ show((i + 1) % scenes.length); schedule(); }, dur[i]);
+        timer = setTimeout(function(){ show((i + 1) % scenes.length); schedule(); }, sDur(i));
       }
       function setPaused(p){
         paused = p;
@@ -245,6 +248,22 @@ document.documentElement.classList.remove('no-js');
 
     reels.forEach(initReel);
   })();
+
+  // Hero reel toggle — switch between assistant reels
+  (function(){
+    var sw = document.querySelector('.reel-switch');
+    if(!sw) return;
+    var btns = sw.querySelectorAll('button');
+    var players = document.querySelectorAll('.reel-stack > .reel-player');
+    if(!players.length) return;
+    btns.forEach(function(b){
+      b.addEventListener('click', function(){
+        var key = b.getAttribute('data-reel');
+        btns.forEach(function(x){ var on = x === b; x.classList.toggle('active', on); x.setAttribute('aria-selected', on ? 'true' : 'false'); });
+        players.forEach(function(pl){ pl.classList.toggle('active', pl.getAttribute('data-reel') === key); });
+      });
+    });
+  }());
 
   // Reveal on scroll
   (function(){
@@ -516,23 +535,4 @@ document.documentElement.classList.remove('no-js');
         ids.forEach(function(id){ spy.observe(document.getElementById(id)); });
       }
     }
-  }());
-  /* Sample Demos — tabbed video switcher */
-  (function(){
-    var tabs = document.querySelectorAll('.vd-tab');
-    var video = document.querySelector('.vd-video');
-    if(!tabs.length || !video) return;
-    var source = video.querySelector('source');
-    tabs.forEach(function(tab){
-      tab.addEventListener('click', function(){
-        var src = tab.getAttribute('data-src');
-        if(source.getAttribute('src') === src) return;
-        tabs.forEach(function(t){ t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
-        tab.classList.add('active'); tab.setAttribute('aria-selected','true');
-        video.pause();
-        source.setAttribute('src', src);
-        video.load();
-        video.play().catch(function(){});
-      });
-    });
   }());

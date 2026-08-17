@@ -1028,19 +1028,25 @@ html.js .nav{ animation:annexNavDrop .6s cubic-bezier(.2,.7,.2,1) both; }
 .about{ background:#e9f1fb; }
 .faq{ background:#ffffff; }
 
+
 /* ============================================================
-   Sample Demos — tabbed video player
+   Hero reel toggle — switch between assistant reels
    ============================================================ */
-.vdemo{ padding:100px 0; background:linear-gradient(160deg,#0f2b44,#0a1c2e); }
-.vdemo .section-head .eyebrow, .vdemo .section-head h2{ color:#fff; }
-.vdemo .section-head p{ color:rgba(255,255,255,.72); }
-.vdemo-tabs{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:34px 0 26px; }
-.vd-tab{ font-family:var(--body); font-size:15px; font-weight:600; color:rgba(255,255,255,.78);
-  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:999px;
-  padding:11px 22px; cursor:pointer; transition:transform .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease; }
-.vd-tab:hover{ background:rgba(255,255,255,.12); color:#fff; transform:translateY(-1px); }
-.vd-tab.active{ background:var(--emerald-2); border-color:var(--emerald-2); color:#fff; box-shadow:0 10px 24px rgba(31,116,186,.42); }
-.vdemo-stage{ max-width:940px; margin:0 auto; border-radius:18px; overflow:hidden;
-  box-shadow:0 30px 70px rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.1); }
-.vd-video{ display:block; width:100%; aspect-ratio:16/9; background:#000; }
-@media(max-width:600px){ .vd-tab{ font-size:13px; padding:9px 15px; } }
+.reel-switch{ display:flex; flex-wrap:wrap; gap:7px; margin-bottom:14px; }
+.reel-switch button{ font-family:var(--body); font-size:12.5px; font-weight:600; color:var(--muted);
+  background:var(--paper-2); border:1px solid var(--line); border-radius:999px; padding:7px 14px; cursor:pointer;
+  transition:transform .18s ease, background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease; }
+.reel-switch button:hover{ color:var(--emerald); border-color:var(--green-soft-2); transform:translateY(-1px); }
+.reel-switch button.active{ background:var(--emerald); border-color:var(--emerald); color:#fff; box-shadow:0 8px 18px rgba(26,99,165,.22); }
+.reel-stack > .reel-player{ display:none; }
+.reel-stack > .reel-player.active{ display:block; }
+@media(max-width:760px){ .reel-switch button{ font-size:11.5px; padding:6px 11px; } }
+
+/* New assistant reels: the value column should not auto-append a check */
+.reel-player[data-reel="inspection"] .rd-row .tm::after,
+.reel-player[data-reel="quotation"] .rd-row .tm::after,
+.reel-player[data-reel="invoicing"] .rd-row .tm::after{ content:none; }
+/* These reels have no side panel — let the list span the full width */
+.reel-player[data-reel="inspection"] .rd-body,
+.reel-player[data-reel="quotation"] .rd-body,
+.reel-player[data-reel="invoicing"] .rd-body{ grid-template-columns:1fr; }
